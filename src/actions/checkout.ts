@@ -5,7 +5,7 @@ import { sendReceiptEmail } from '@/lib/mail';
 
 const ETOMIN_EMAIL = process.env.ETOMIN_EMAIL!;
 const ETOMIN_PASSWORD = process.env.ETOMIN_PASSWORD!;
-const ETOMIN_BASE_URL = process.env.ETOMIN_BASE_URL!;
+const ETOMIN_BASE_URL = 'https://pagos.etomin.com/api/v1';
 
 const getEtominHeaders = (extraHeaders = {}) => ({
   'Content-Type': 'application/json',
