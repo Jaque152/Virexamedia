@@ -1,9 +1,8 @@
 'use server';
-
+import { CheckoutPayload, CartItem, Checkout } from '@/types';
 import { createClient } from '@/lib/supabase/server';
-import { Resend } from 'resend';
+import { sendReceiptEmail } from '@/lib/mail';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const ETOMIN_EMAIL = process.env.ETOMIN_EMAIL!;
 const ETOMIN_PASSWORD = process.env.ETOMIN_PASSWORD!;
 const ETOMIN_BASE_URL = process.env.ETOMIN_BASE_URL!;
@@ -11,7 +10,7 @@ const ETOMIN_BASE_URL = process.env.ETOMIN_BASE_URL!;
 const getEtominHeaders = (extraHeaders = {}) => ({
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'User-Agent': 'NinjaCreatives/1.0',
+  'User-Agent': 'MarketingResultados /1.0',
   ...extraHeaders
 });
 
@@ -25,12 +24,12 @@ async function safeEtominFetch(url: string, options: RequestInit, stepName: stri
   }
 }
 
-export async function processCheckout(formData: any) {
+export async function processCheckout(formData: CheckoutPayload) {
   try {
     const { locale, contactInfo, billingInfo, cardInfo, items, total } = formData;
     const supabase = await createClient();
 
-    // 1. LOGIN ETOMIN
+    // 1 & 2. LOGIN Y TOKENIZAR
     const signinData = await safeEtominFetch(`${ETOMIN_BASE_URL}/signin`, {
       method: 'POST',
       headers: getEtominHeaders(),
@@ -40,7 +39,6 @@ export async function processCheckout(formData: any) {
     if (!signinData.authToken) throw new Error("Falla de autenticación con el procesador.");
     const authToken = signinData.authToken;
 
-    // 2. TOKENIZAR TARJETA
     const tokenData = await safeEtominFetch(`${ETOMIN_BASE_URL}/card/tokenizer`, {
       method: 'POST',
       headers: getEtominHeaders({ 'Authorization': `Bearer ${authToken}` }),
@@ -76,9 +74,9 @@ export async function processCheckout(formData: any) {
         cardNumberToken: tokenData.cardNumberToken,
         cvv: cardInfo.cvv
       },
-      items: items.map((i: any) => ({
+      items: items.map((i: CartItem) => ({
         title: i.plans_nc?.title || 'Estrategia Personalizada',
-        amount: i.custom_price || i.plans_nc?.price,
+        amount: i.custom_price || i.plans_nc?.price || 0,
         quantity: i.quantity,
         id: i.plan_id.toString()
       }))
@@ -94,26 +92,50 @@ export async function processCheckout(formData: any) {
       throw new Error(saleData.message || "Pago declinado.");
     }
 
-    const { error: dbError } = await supabase.from('bookings_nc').insert({
-      customer_email: contactInfo.email,
-      total_amount: total,
-      transaction_id: saleData.transactionId,
-      status: 'paid',
-      payload: saleData 
-    });
+    // 4. GUARDAR EN BD: checkouts_nc
+    const subtotalCalc = total / 1.16;
+    const { data: checkoutRecord, error: dbError } = await supabase
+      .from('checkouts_nc')
+      .insert({
+        session_id: `session_${Date.now()}`, 
+        nombre: contactInfo.firstName,
+        apellidos: contactInfo.lastName,
+        pais_region: billingInfo.pais,
+        direccion_calle: billingInfo.direccion,
+        localidad_ciudad: billingInfo.localidad,
+        region_estado: billingInfo.estado,
+        codigo_postal: billingInfo.codigo_postal,
+        telefono: contactInfo.phone,
+        correo_electronico: contactInfo.email,
+        indicaciones_pedido: null,
+        subtotal: subtotalCalc,
+        impuesto: total - subtotalCalc,
+        total_estimado: total,
+        payment_status: 'paid'
+      })
+      .select()
+      .single();
 
-    if (dbError) console.error("Error BD:", dbError);
+    if (dbError || !checkoutRecord) throw new Error("Error guardando el registro.");
 
-    // 5. ENVÍO DE EMAIL CON RESEND
-    await resend.emails.send({
-      from: 'Ninja Creatives <pagos@ninjacreatives.com>',
-      to: [contactInfo.email],
-      subject: locale === 'es' ? 'Confirmación de tu Estrategia' : 'Strategy Purchase Confirmation',
-      html: `<p>¡Hola ${contactInfo.firstName}! Tu pago de ${total} MXN ha sido procesado con éxito.</p>`
-    });
+    // 5. GUARDAR ITEMS EN checkout_items_nc
+    const checkoutItems = items.map((item: CartItem) => ({
+      checkout_id: checkoutRecord.id,
+      plan_id: item.plan_id,
+      quantity: item.quantity,
+      unit_price: item.plans_nc?.price || 0,
+      custom_price: item.custom_price,
+      quote_id: item.quote_id
+    }));
+
+    await supabase.from('checkout_items_nc').insert(checkoutItems);
+
+    // 6. ENVIAR CORREO
+    await sendReceiptEmail(checkoutRecord as Checkout, items, locale === 'en');
 
     return { success: true };
-  } catch (error: any) {
-    return { success: false, message: error.message };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "Error inesperado.";
+    return { success: false, message: errorMessage };
   }
 }

@@ -5,7 +5,13 @@ import { AddToCartButton } from './AddToCartButton';
 import { ArrowLeft, CheckCircle2 } from 'lucide-react';
 
 // === 1. METADATOS SEO DINÁMICOS ===
-export async function generateMetadata({ params: { slug } }: { params: { slug: string } }) {
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: Promise<{ slug: string }> // <-- Definimos params como Promesa
+}) {
+  const { slug } = await params; // <-- Esperamos la promesa aquí adentro
+  
   const supabase = await createClient();
   const { data: plan } = await supabase.from('plans_nc').select('title, description').eq('slug', slug).single();
   
@@ -19,10 +25,12 @@ export async function generateMetadata({ params: { slug } }: { params: { slug: s
 
 // === 2. PÁGINA DEL SERVIDOR ===
 export default async function PlanDetailPage({ 
-  params: { locale, slug } 
+  params 
 }: { 
-  params: { locale: string, slug: string } 
+  params: Promise<{ locale: string, slug: string }> 
 }) {
+  const { locale, slug } = await params; 
+
   const supabase = await createClient();
 
   // Buscamos el plan específico

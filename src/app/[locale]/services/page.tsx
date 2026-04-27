@@ -2,11 +2,12 @@ import { createClient } from '@/lib/supabase/server';
 import { Plan } from '@/types';
 import { PlanGrid } from './PlanGrid';
 
-export default async function ServicesPage({
-  params: { locale }
-}: {
-  params: { locale: string }
+export default async function ServicesPage({ 
+  params 
+}: { 
+  params: Promise<{ locale: string }> 
 }) {
+  const { locale } = await params;
   const supabase = await createClient();
   
 

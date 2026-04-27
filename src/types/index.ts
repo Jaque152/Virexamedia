@@ -82,3 +82,34 @@ export interface CustomPlanPayment {
   payment_status: string;
   created_at: string;
 }
+
+export interface ContactInfo {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+}
+
+export interface BillingInfo {
+  pais: string;
+  direccion: string;
+  localidad: string;
+  estado: string;
+  codigo_postal: string;
+}
+
+export interface CardInfo {
+  number: string;
+  name: string;
+  expiry: string;
+  cvv: string;
+}
+
+export interface CheckoutPayload {
+  locale: string;
+  contactInfo: ContactInfo;
+  billingInfo: BillingInfo;
+  cardInfo: CardInfo;
+  items: CartItem[]; 
+  total: number;
+}
