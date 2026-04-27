@@ -38,19 +38,24 @@ export default function CheckoutContent() {
     e.preventDefault();
     setIsProcessing(true);
     setErrorMsg("");
-
-    const formData = { locale, contactInfo, billingInfo, cardInfo };
-    const res = await processCheckout(formData);
-
-    if (res.success) {
-      setShowSuccess(true);
-      clearCart();
-    } else {
-      setErrorMsg(res.message);
-      setIsProcessing(false);
-    }
+    const payload = {
+      locale,
+      contactInfo,
+      billingInfo,
+      cardInfo,
+      items, 
+      total  
   };
+  const res = await processCheckout(payload);
 
+  if (res.success) {
+    setShowSuccess(true);
+    clearCart();
+  } else {
+    setErrorMsg(res.message);
+    setIsProcessing(false);
+  }
+};
   const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let val = e.target.value.replace(/\D/g, '');
     if (val.length > 4) val = val.slice(0, 4);
