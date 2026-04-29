@@ -15,7 +15,7 @@ function requireEnvVar(name: string): string {
 const getEtominHeaders = (extraHeaders = {}) => ({
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'User-Agent': 'NinjaCreatives/1.0',
+  'User-Agent': 'Marketing Recursos/1.0',
   ...extraHeaders
 });
 

@@ -52,7 +52,7 @@ export function Navigation() {
               <div className="relative w-10 h-10 md:w-12 md:h-12 overflow-hidden transition-transform duration-300 group-hover:scale-105">
                 <Image
                   src="/logo.png" 
-                  alt="Ninja Creatives Logo"
+                  alt="MR Logo"
                   fill
                   className="object-contain"
                   priority 

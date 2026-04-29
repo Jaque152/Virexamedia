@@ -133,7 +133,7 @@ export default function CustomPricingPage() {
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-bold">$</span>
               <Input 
                 type="number" 
-                min="1000"
+                min="0"
                 step="0.01"
                 required 
                 value={formData.monto || ""} 

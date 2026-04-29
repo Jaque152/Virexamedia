@@ -5,7 +5,7 @@ import { useLocale } from "next-intl";
 import Link from "next/link";
 import { submitContact } from "@/actions/contact";
 import { ContactFormData } from "@/lib/mail";
-import { CheckCircle, Loader2, Send } from "lucide-react";
+import { CheckCircle, Loader2, Send, MapPin, Phone, Mail as MailIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -78,13 +78,71 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-screen bg-background bg-grain pt-32 pb-24 text-foreground relative">
-      <div className="container mx-auto px-4 max-w-3xl relative z-10">
-        <h1 className="text-4xl md:text-5xl font-bold mb-12 text-center text-gradient">
-          {isEs ? 'Contacto' : 'Contact'}
-        </h1>
+      <div className="container mx-auto px-4 max-w-4xl relative z-10">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gradient">
+            {isEs ? 'Contacto' : 'Contact'}
+          </h1>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            {isEs 
+              ? '¿Listo para llevar tu marca al siguiente nivel? Escríbenos o visítanos, estamos aquí para ayudarte.' 
+              : 'Ready to take your brand to the next level? Write to us or visit us, we are here to help.'}
+          </p>
+        </div>
         
+        {/* === TARJETAS DE INFORMACIÓN DE CONTACTO === */}
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
+          
+          {/* Tarjeta 1: Dirección */}
+          <div className="bg-card border border-border p-6 rounded-2xl flex flex-col items-center text-center shadow-lg hover:border-primary/50 transition-colors">
+            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+              <MapPin className="w-6 h-6 text-primary" />
+            </div>
+            <h3 className="font-bold text-lg mb-2 text-foreground">
+              {isEs ? 'Dirección' : 'Address'}
+            </h3>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              Álvaro Obregón No. 151, Ofi. 1301<br />
+              Roma Norte, Cuauhtémoc<br />
+              C.P. 06700, CDMX
+            </p>
+          </div>
+
+          {/* Tarjeta 2: Teléfono */}
+          <div className="bg-card border border-border p-6 rounded-2xl flex flex-col items-center text-center shadow-lg hover:border-primary/50 transition-colors">
+            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+              <Phone className="w-6 h-6 text-primary" />
+            </div>
+            <h3 className="font-bold text-lg mb-2 text-foreground">
+              {isEs ? 'Teléfono' : 'Phone'}
+            </h3>
+            <p className="text-muted-foreground text-sm">
+              <a href="tel:+525555256732" className="hover:text-primary transition-colors">
+                +52 55 5525 6732
+              </a>
+            </p>
+          </div>
+
+          {/* Tarjeta 3: Email */}
+          <div className="bg-card border border-border p-6 rounded-2xl flex flex-col items-center text-center shadow-lg hover:border-primary/50 transition-colors">
+            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+              <MailIcon className="w-6 h-6 text-primary" />
+            </div>
+            <h3 className="font-bold text-lg mb-2 text-foreground">
+              {isEs ? 'Mail' : 'Email'}
+            </h3>
+            <p className="text-muted-foreground text-sm">
+              <a href="info@marketingresultados.com" className="hover:text-primary transition-colors">
+                info@marketingresultados.com
+              </a>
+            </p>
+          </div>
+
+        </div>
+
         {errorMsg && <div className="bg-destructive/10 border border-destructive text-destructive p-4 rounded-lg mb-8">{errorMsg}</div>}
 
+        {/* === FORMULARIO === */}
         <form onSubmit={handleSubmit} className="bg-card p-8 md:p-12 border border-border rounded-2xl shadow-lg space-y-6">
           <div className="grid sm:grid-cols-2 gap-6">
             <Input placeholder={isEs ? "Nombre Completo *" : "Full Name *"} required value={formData.nombre_completo} onChange={(e)=>setFormData({...formData, nombre_completo:e.target.value})} className={inputClass} />
