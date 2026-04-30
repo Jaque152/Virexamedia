@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { T } from "@/components/shared/T";
 import { ArrowRight } from 'lucide-react';
 import { HeroVisuals } from '@/components/home/Hero';
+import { HeroTags } from '@/components/home/HeroTags'; 
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -19,15 +20,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <div className="container mx-auto px-6 lg:px-8 max-w-7xl relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             
-            {/* COLUMNA IZQUIERDA: Textos y CTA */}
-            <div className="max-w-2xl relative z-20">
+            {/* COLUMNA IZQUIERDA: Textos, Globos y CTA */}
+            <div className="max-w-2xl relative z-20 mt-10 lg:mt-0">
               <span className="text-[var(--copper)] text-sm font-bold uppercase tracking-[0.3em] font-sans mb-6 block">
                 {isEs ? 'Agencia de Marketing' : 'Marketing Agency'}
               </span>
               
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold font-serif leading-[1.1] text-[var(--cream)] mb-8">
-                <T>Estrategias</T> <br />
-                <span className="text-gradient"><T>Dirigidas.</T></span>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold font-serif leading-[1.1] text-[var(--cream)] mb-6">
+                <T>Marketing</T> <br />
+                <span className="text-gradient"><T>Resultados</T></span>
               </h1>
               
               <p className="text-xl md:text-2xl text-[var(--cream)]/60 font-sans mb-12 max-w-xl leading-relaxed">
@@ -36,18 +37,21 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   : 'We transform your brand\'s potential into measurable results. We combine disruptive creativity and data analysis to scale your business to the next level.'}
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-6 font-sans">
+              {/* LOS GLOBOS FLOTANTES SE INSERTAN AQUÍ */}
+              <HeroTags locale={locale} />
+
+              <div className="flex flex-col sm:flex-row gap-6 font-sans mt-10">
                 <Link 
-                  href={`/${locale}/about`}
-                  className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-[var(--copper)]/30 text-[var(--cream)] font-bold text-lg hover:bg-[var(--copper)]/10 transition-colors group"
+                  href={`/${locale}/services`}
+                  className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-[var(--copper)] text-white font-bold text-lg hover:opacity-90 transition-all group shadow-lg shadow-[var(--copper)]/20"
                 >
-                  {isEs ? 'Conocenos' : 'View Strategies'}
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform text-[var(--copper)]" />
+                  {isEs ? 'Ver Estrategias' : 'View Strategies'}
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
             </div>
 
-            {/* COLUMNA DERECHA: Composición Visual (Client Component) */}
+            {/* COLUMNA DERECHA: Composición Visual Asimétrica */}
             <HeroVisuals locale={locale} />
 
           </div>
