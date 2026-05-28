@@ -2,58 +2,51 @@ import { createClient } from '@/lib/supabase/server';
 import { Plan } from '@/types';
 import { PlanGrid } from './PlanGrid';
 
-export default async function ServicesPage({ 
-  params 
-}: { 
-  params: Promise<{ locale: string }> 
-}) {
+export default async function ServicesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const supabase = await createClient();
   
-
   const { data: plans } = await supabase
-    .from('plans_nc')
+    .from('plans_virexa')
     .select('*')
     .eq('is_active', true)
     .neq('slug', 'plan-personalizado')
     .order('price', { ascending: false });
 
-  // Textos según el idioma
   const isEs = locale === 'es';
-  const tagText = isEs ? 'Nuestras Estrategias' : 'Our Strategies';
-  const title1 = isEs ? 'Planes de' : 'Marketing';
-  const title2 = isEs ? 'Élite' : 'Plans';
-  const descText = isEs 
-    ? 'Soluciones integrales diseñadas para elevar el posicionamiento de tu marca y generar resultados medibles.'
-    : 'Comprehensive solutions designed to elevate your brand positioning and drive measurable results.';
 
   return (
-    <main className="relative min-h-screen pt-32 pb-24 overflow-hidden bg-[var(--navy)] bg-grain">
-      {/* Elementos de fondo */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-[var(--copper)]/5 rounded-full blur-[100px]" />
-        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[var(--amber)]/5 rounded-full blur-[120px]" />
-      </div>
+    <main className="relative min-h-screen pt-32 pb-24 bg-white">
+      
+      {/* Elemento de fondo sutil tech */}
+      <div className="absolute top-0 right-0 w-1/2 h-[500px] bg-gradient-to-bl from-[var(--virexa-cyan)]/10 to-transparent pointer-events-none rounded-bl-full" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Cabecera de la sección */}
-        <div className="text-center mb-20 animate-in fade-in slide-in-from-bottom-8 duration-700">
-          <span className="text-[var(--copper)] uppercase tracking-[0.3em] text-sm font-medium font-sans">
-            {tagText}
+        
+        {/* Cabecera Alineada a la Izquierda para un look más tech */}
+        <div className="max-w-3xl mb-20 animate-in fade-in slide-in-from-left-8 duration-700">
+          <span className="inline-block py-1 px-3 rounded-full bg-[var(--virexa-blue)]/10 text-[var(--virexa-blue)] uppercase tracking-widest text-xs font-bold mb-6">
+            {isEs ? 'Nuestras Soluciones' : 'Our Solutions'}
           </span>
-          <h1 className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--cream)] font-serif">
-            {title1} <span className="text-gradient">{title2}</span>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-slate-900 tracking-tight leading-[1.1]">
+            {isEs ? 'Productos ' : 'Digital '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--virexa-blue)] to-[var(--virexa-cyan)]">
+              {isEs ? 'Digitales' : 'Products'}
+            </span>
           </h1>
-          <p className="mt-6 text-lg text-[var(--cream)]/60 max-w-2xl mx-auto font-sans">
-            {descText}
+          <p className="mt-6 text-xl text-slate-500 font-medium leading-relaxed">
+            {isEs 
+              ? 'Arquitecturas web y estrategias UX/UI empaquetadas para escalar tu negocio con rapidez y precisión.'
+              : 'Web architectures and UX/UI strategies packaged to scale your business with speed and precision.'}
           </p>
         </div>
 
+        {/* Grid de Planes */}
         {plans && plans.length > 0 ? (
           <PlanGrid plans={plans as Plan[]} locale={locale} />
         ) : (
-          <div className="text-center text-[var(--cream)]/50 py-20 font-sans">
-            {isEs ? 'No hay planes disponibles en este momento.' : 'No plans available at the moment.'}
+          <div className="text-center text-slate-400 py-20 bg-slate-50 rounded-3xl border border-slate-100">
+            {isEs ? 'Configurando soluciones. Vuelve pronto.' : 'Configuring solutions. Check back soon.'}
           </div>
         )}
       </div>

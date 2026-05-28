@@ -1,6 +1,4 @@
-import Link from 'next/link';
 import { T } from "@/components/shared/T";
-import { ArrowRight } from 'lucide-react';
 import { HeroVisuals } from '@/components/home/Hero';
 import { HeroTags } from '@/components/home/HeroTags'; 
 
@@ -9,52 +7,40 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const isEs = locale === 'es';
 
   return (
-    <main className="flex flex-col min-h-screen bg-[var(--navy)] bg-grain overflow-hidden">
+    <main className="flex flex-col min-h-screen bg-background bg-grain overflow-hidden">
       
-      {/* HERO SECTION */}
-      <section className="relative min-h-screen flex items-center pt-20">
+      {/* HERO SECTION - NUEVO ACOMODO CENTRADO */}
+      <section className="relative min-h-screen flex flex-col items-center pt-32 pb-16">
         {/* Glow Effects de fondo */}
-        <div className="absolute top-1/4 left-10 w-[40vw] h-[40vw] bg-[var(--copper)]/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-[50vw] h-[50vw] bg-[var(--amber)]/5 rounded-full blur-[150px] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60vw] h-[40vw] bg-gradient-to-b from-[var(--virexa-cyan)]/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
 
-        <div className="container mx-auto px-6 lg:px-8 max-w-7xl relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="container mx-auto px-6 lg:px-8 max-w-5xl relative z-10 text-center flex flex-col items-center">
             
-            {/* COLUMNA IZQUIERDA: Textos, Globos y CTA */}
-            <div className="max-w-2xl relative z-20 mt-10 lg:mt-0">
-              <span className="text-[var(--copper)] text-sm font-bold uppercase tracking-[0.3em] font-sans mb-6 block">
-                {isEs ? 'Agencia de Marketing' : 'Marketing Agency'}
-              </span>
-              
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold font-serif leading-[1.1] text-[var(--cream)] mb-6">
-                <T>Marketing</T> <br />
-                <span className="text-gradient"><T>Resultados</T></span>
-              </h1>
-              
-              <p className="text-xl md:text-2xl text-[var(--cream)]/60 font-sans mb-12 max-w-xl leading-relaxed">
-                {isEs 
-                  ? 'Transformamos el potencial de tu marca en resultados medibles. Combinamos creatividad disruptiva y análisis de datos para escalar tu negocio al siguiente nivel.'
-                  : 'We transform your brand\'s potential into measurable results. We combine disruptive creativity and data analysis to scale your business to the next level.'}
-              </p>
+          <span className="text-[var(--virexa-blue)] text-sm font-bold uppercase tracking-[0.3em] font-sans mb-6 block">
+            {isEs ? 'Marketing Digital & UX' : 'Digital Marketing & UX'}
+          </span>
+          
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] text-foreground mb-8">
+            <T>Innovación</T> <br />
+            <span className="text-gradient"><T>Digital</T></span>
+          </h1>
+          
+          <p className="text-lg md:text-xl text-muted-foreground font-sans mb-10 max-w-2xl leading-relaxed mx-auto">
+            {isEs 
+              ? 'En Virexamedia transformamos tu identidad corporativa. Fusionamos tecnología, diseño UI/UX y estrategias precisas para liderar en el ecosistema web moderno.'
+              : 'At Virexamedia we transform your corporate identity. We merge technology, UI/UX design, and precise strategies to lead in the modern web ecosystem.'}
+          </p>
 
-              {/* LOS GLOBOS FLOTANTES SE INSERTAN AQUÍ */}
-              <HeroTags locale={locale} />
-
-              <div className="flex flex-col sm:flex-row gap-6 font-sans mt-10">
-                <Link 
-                  href={`/${locale}/services`}
-                  className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-[var(--copper)] text-white font-bold text-lg hover:opacity-90 transition-all group shadow-lg shadow-[var(--copper)]/20"
-                >
-                  {isEs ? 'Ver Estrategias' : 'View Strategies'}
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
-            </div>
-
-            {/* COLUMNA DERECHA: Composición Visual Asimétrica */}
-            <HeroVisuals locale={locale} />
-
+          {/* GLOBOS FLOTANTES CENTRADOS */}
+          <div className="mb-16">
+            <HeroTags locale={locale} />
           </div>
+
+        </div>
+
+        {/* COMPOSICIÓN VISUAL - AHORA EN FORMATO PANORÁMICO ABAJO */}
+        <div className="w-full relative z-20 mt-auto px-4 md:px-8 max-w-7xl mx-auto">
+           <HeroVisuals locale={locale} />
         </div>
       </section>
 

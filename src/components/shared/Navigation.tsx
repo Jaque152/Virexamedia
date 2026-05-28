@@ -6,7 +6,7 @@ import { useLocale } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCart } from "@/hooks/use-cart";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Menu, X } from "lucide-react";
 
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
@@ -18,17 +18,15 @@ export function Navigation() {
 
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Arreglo de navegación dinámico según el idioma
   const navLinks = [
-    { name: locale === 'es' ? "Inicio" : "Home", href: `/${locale}` },
-    { name: locale === 'es' ? "Agencia" : "Agency", href: `/${locale}/about` },
-    { name: locale === 'es' ? "Estrategias" : "Strategies", href: `/${locale}/services` },
-    { name: locale === 'es' ? "Personalizado" : "Custom", href: `/${locale}/pricing` },
+    { name: locale === 'es' ? "Soluciones" : "Solutions", href: `/${locale}/services` },
+    { name: locale === 'es' ? "Nosotros" : "About Us", href: `/${locale}/about` },
+    { name: locale === 'es' ? "Planes" : "Plans", href: `/${locale}/pricing` },
     { name: locale === 'es' ? "Contacto" : "Contact", href: `/${locale}/contact` },
   ];
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -39,94 +37,61 @@ export function Navigation() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "bg-[var(--navy)]/90 backdrop-blur-xl py-4 shadow-2xl shadow-black/20"
+            ? "bg-white/90 backdrop-blur-md py-3 shadow-sm border-b border-border"
             : "bg-transparent py-6"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link href={`/${locale}`} className="flex items-center gap-3 group">
-              <div className="relative w-10 h-10 md:w-12 md:h-12 overflow-hidden transition-transform duration-300 group-hover:scale-105">
-                <Image
-                  src="/logo.png" 
-                  alt="MR Logo"
-                  fill
-                  className="object-contain"
-                  priority 
-                />
-              </div>
+            <Link href={`/${locale}`} className="flex items-center gap-2 group">
+              <span className="font-bold text-2xl tracking-tight text-foreground">
+                Virexa<span className="text-[var(--virexa-blue)]">media</span>
+              </span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-1">
-              {navLinks.map((link, i) => {
+            {/* Desktop Navigation - Centrada para equilibrar */}
+            <div className="hidden md:flex items-center gap-1 bg-white/50 backdrop-blur-sm rounded-full px-2 py-1 border border-border shadow-sm">
+              {navLinks.map((link) => {
                 const isActive = pathname === link.href;
                 return (
-                  <motion.div
+                  <Link
                     key={link.name}
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.1 }}
+                    href={link.href}
+                    className={`px-5 py-2 text-sm font-semibold transition-all rounded-full ${
+                      isActive 
+                        ? "text-white bg-gradient-to-r from-[var(--virexa-blue)] to-[var(--virexa-cyan)] shadow-md" 
+                        : "text-slate-600 hover:text-[var(--virexa-blue)] hover:bg-slate-50"
+                    }`}
                   >
-                    <Link
-                      href={link.href}
-                      className={`relative px-5 py-2 text-sm font-medium transition-colors duration-300 font-sans ${
-                        isActive ? "text-[var(--amber)]" : "text-[var(--cream)]/70 hover:text-[var(--cream)]"
-                      }`}
-                    >
-                      {link.name}
-                      {isActive && (
-                        <motion.div
-                          layoutId="activeNav"
-                          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-[var(--amber)] rounded-full"
-                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                        />
-                      )}
-                    </Link>
-                  </motion.div>
+                    {link.name}
+                  </Link>
                 );
               })}
             </div>
 
-            {/* Acciones Right: Botón CTA & Carrito */}
+            {/* Acciones */}
             <div className="flex items-center gap-4">
               <button
                 onClick={() => openCart(true)}
-                className="relative p-2 text-[var(--cream)]/80 hover:text-[var(--cream)] transition-colors"
-                title={locale === 'es' ? "Abrir carrito" : "Open cart"}
+                className="p-2 text-slate-600 hover:text-[var(--virexa-blue)] transition-colors relative bg-white/50 rounded-full border border-border shadow-sm"
               >
-                <ShoppingBag className="w-6 h-6" />
+                <ShoppingBag className="w-5 h-5" />
                 {cartCount > 0 && (
-                  <span className="absolute top-0 right-0 w-5 h-5 bg-[var(--copper)] text-[var(--navy)] text-xs font-bold flex items-center justify-center rounded-full transform translate-x-1 -translate-y-1">
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[var(--virexa-blue)] text-white text-[10px] font-bold flex items-center justify-center rounded-full shadow-md">
                     {cartCount}
                   </span>
                 )}
               </button>
 
-              {/* Mobile Menu Button */}
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden relative w-10 h-10 flex items-center justify-center"
-                aria-label={locale === 'es' ? "Menú principal" : "Main menu"}
+                className="md:hidden p-2 text-slate-800 bg-white/50 rounded-full border border-border shadow-sm"
               >
-                <div className="flex flex-col gap-1.5">
-                  <motion.span
-                    animate={{ rotate: mobileMenuOpen ? 45 : 0, y: mobileMenuOpen ? 6 : 0 }}
-                    className="w-6 h-0.5 bg-[var(--cream)] origin-center"
-                  />
-                  <motion.span
-                    animate={{ opacity: mobileMenuOpen ? 0 : 1 }}
-                    className="w-6 h-0.5 bg-[var(--cream)]"
-                  />
-                  <motion.span
-                    animate={{ rotate: mobileMenuOpen ? -45 : 0, y: mobileMenuOpen ? -6 : 0 }}
-                    className="w-6 h-0.5 bg-[var(--cream)] origin-center"
-                  />
-                </div>
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
             </div>
           </div>
@@ -140,20 +105,20 @@ export function Navigation() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-40 pt-24 bg-[var(--navy)]/98 backdrop-blur-xl md:hidden"
+            className="fixed inset-0 z-40 pt-28 bg-white/95 backdrop-blur-xl md:hidden"
           >
-            <div className="flex flex-col items-center gap-6 p-8">
+            <div className="flex flex-col items-center gap-8 p-8">
               {navLinks.map((link, i) => (
                 <motion.div
                   key={link.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
                 >
                   <Link
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-2xl font-serif text-[var(--cream)] hover:text-[var(--amber)] transition-colors"
+                    className="text-3xl font-bold text-slate-800 hover:text-[var(--virexa-blue)] transition-colors"
                   >
                     {link.name}
                   </Link>

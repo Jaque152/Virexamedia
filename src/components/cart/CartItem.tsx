@@ -13,7 +13,7 @@ export function CartItemComponent({ item }: { item: CartItem }) {
   const locale = useLocale();
   const isEs = locale === 'es';
 
-  const price = item.custom_price !== null ? item.custom_price : (item.plans_nc?.price || 0);
+  const price = item.custom_price !== null ? item.custom_price : (item.plans_virexa?.price || 0);
   const formatPrice = (p: number) => new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(p);
 
   const handleUpdateQty = (newQty: number) => {
@@ -44,7 +44,7 @@ export function CartItemComponent({ item }: { item: CartItem }) {
         <div className="pr-6">
           <h4 className="font-serif text-lg font-bold text-foreground leading-tight">
             {/* VUELVE A LA NORMALIDAD: Muestra el título real o el fallback */}
-            {item.plans_nc?.title || (isEs ? 'Estrategia Personalizada' : 'Custom Strategy')}
+            {item.plans_virexa?.title || (isEs ? 'Estrategia Personalizada' : 'Custom Strategy')}
           </h4>
           
           {item.quote_id && (

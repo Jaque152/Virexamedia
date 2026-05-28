@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { useLocale } from "next-intl";
+import { Code2, MonitorSmartphone, TrendingUp, ArrowRight } from "lucide-react";
 
 export default function About() {
   const ref = useRef(null);
@@ -10,147 +11,112 @@ export default function About() {
   const locale = useLocale();
   const isEs = locale === 'es';
 
-  // El array se mueve adentro para poder leer el 'locale'
-  const services = [
-    {
-      title: isEs ? "Marketing de Alto Rendimiento" : "High-Performance Marketing",
-      description: isEs 
-        ? "Impulsa tu marca hacia el siguiente nivel. Implementamos soluciones disruptivas diseñadas para que logres destacar y conectar con tu audiencia de manera auténtica y efectiva."
-        : "Push your brand to the next level. We implement disruptive solutions designed to help you stand out and connect with your audience authentically and effectively."
-    },
-    {
-      title: isEs ? "Comunicación Estratégica" : "Strategic Communication",
-      description: isEs 
-        ? "Creamos conexiones que impactan. Potenciamos tu mensaje mediante enfoques creativos que aseguran que tu voz sea escuchada con claridad por el público adecuado."
-        : "We create connections that make an impact. We empower your message through creative approaches ensuring your voice is heard clearly by the right audience."
-    },
-    {
-      title: isEs ? "Estrategia y Visión de Negocio" : "Business Strategy & Vision",
-      description: isEs 
-        ? "Diseñamos la hoja de ruta para tu éxito. Elevamos el valor de tu marca con estrategias innovadoras que garantizan un posicionamiento sólido y un impacto duradero en la industria."
-        : "We design the roadmap to your success. We elevate your brand's value with innovative strategies that guarantee solid positioning and a lasting impact in the industry."
-    }
-  ];
-
   return (
-    <section
-      id="about"
-      ref={ref}
-      className="relative py-32 overflow-hidden bg-gradient-to-b from-[#0F0F1A] to-[#1A1B2E]"
-    >
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#C87941]/30 to-transparent" />
-
+    <section ref={ref} className="relative pt-32 pb-24 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        
+        {/* Cabecera Monumental Centrada */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-20"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-center max-w-4xl mx-auto mb-20"
         >
-          <span className="text-[#C87941] uppercase tracking-[0.3em] text-sm font-medium">
-            {isEs ? 'Sobre Nosotros' : 'About Us'}
-          </span>
-          <h2 className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-bold text-[#F5F0E8] max-w-3xl leading-tight">
-            Marketing Recursos{" "}
-            <span className="text-gradient">
-              {isEs ? 'Elevando el Potencial de tu Negocio' : 'Elevating Your Business Potential'}
+          <h2 className="text-5xl md:text-7xl font-bold text-slate-900 tracking-tight leading-tight">
+            {isEs ? 'Transformamos ideas en ' : 'We transform ideas into '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--virexa-blue)] to-[var(--virexa-cyan)]">
+              {isEs ? 'Ecosistemas Digitales' : 'Digital Ecosystems'}
             </span>
           </h2>
+          <p className="mt-8 text-xl text-slate-500 font-medium">
+            {isEs 
+              ? 'En Virexamedia fusionamos código limpio, diseño UX/UI y estrategias de conversión para liderar tu industria.'
+              : 'At Virexamedia we merge clean code, UX/UI design, and conversion strategies to lead your industry.'}
+          </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
+        {/* BENTO BOX GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(250px,auto)]">
+          
+          {/* Caja 1: Misión (Grande) */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-8"
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="md:col-span-2 bg-slate-50 rounded-3xl p-10 border border-slate-100 shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow"
           >
-            <p className="text-xl text-[#F5F0E8]/80 leading-relaxed">
-              {isEs ? (
-                <>En <strong className="text-[#E8B86D] font-semibold">Marketing Recursos</strong>, nuestra misión es clara: diseñar soluciones de marketing personalizadas y de alto impacto que permitan a las empresas no solo crecer, sino dominar un mercado en constante evolución.</>
-              ) : (
-                <>At <strong className="text-[#E8B86D] font-semibold">Marketing Recursos</strong>, our mission is clear: to design highly personalized and impactful marketing solutions that allow companies not only to grow but to dominate an ever-evolving market.</>
-              )}
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="space-y-8"
-          >
-            <div className="relative">
-              <div className="absolute -left-6 top-0 w-1 h-full bg-gradient-to-b from-[#C87941] to-[#E8B86D] rounded-full" />
-              <h3 className="text-3xl font-bold text-[#F5F0E8] mb-6">
-                {isEs ? 'Nuestra Visión y Propósito' : 'Our Vision & Purpose'}
-              </h3>
-              <div className="space-y-6 text-[#F5F0E8]/70 leading-relaxed">
-                <p>
-                  {isEs 
-                    ? 'Aspiramos a consolidarnos como el referente de confianza y éxito en el sector. Nos mueve la creatividad estratégica, la innovación constante y una búsqueda incansable de la excelencia en el servicio.'
-                    : 'We aspire to consolidate ourselves as the benchmark of trust and success in the sector. We are driven by strategic creativity, constant innovation, and an untiring search for service excellence.'}
-                </p>
-                <p>
-                  {isEs 
-                    ? 'Entendemos que el éxito es un trabajo en equipo. Por ello, apostamos por una colaboración estrecha y una comunicación transparente con cada cliente, garantizando que sus objetivos de negocio no solo se alcancen, sino que se superen.'
-                    : 'We understand that success is a team effort. Therefore, we are committed to close collaboration and transparent communication with each client, ensuring their business goals are not only met but exceeded.'}
-                </p>
-                <p className="text-[#F5F0E8] font-medium pt-2">
-                  {isEs 
-                    ? '¿Buscas resultados reales con un enfoque creativo? Contáctanos hoy mismo y transformemos tu visión en éxito.'
-                    : 'Looking for real results with a creative approach? Contact us today and let\'s transform your vision into success.'}
-                </p>
-              </div>
-            </div>
-
-            <motion.a
-              href={`/${locale}/contact`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center gap-3 mt-8 group cursor-pointer"
-            >
-              <span className="text-[#E8B86D] font-medium group-hover:text-[#C87941] transition-colors">
-                {isEs ? 'Inicia tu Proyecto' : 'Start Your Project'}
+            <div>
+              <span className="text-[var(--virexa-blue)] text-sm font-bold uppercase tracking-widest mb-4 block">
+                {isEs ? 'Nuestra Misión' : 'Our Mission'}
               </span>
-              <div className="w-10 h-10 rounded-full border border-[#E8B86D] flex items-center justify-center group-hover:bg-[#E8B86D] group-hover:border-[#E8B86D] transition-all duration-300">
-                <svg className="w-4 h-4 text-[#E8B86D] group-hover:text-[#0F0F1A] group-hover:translate-x-1 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </div>
-            </motion.a>
+              <h3 className="text-3xl font-bold text-slate-900 mb-4">
+                {isEs ? 'Desarrollo Orientado al Rendimiento' : 'Performance-Driven Development'}
+              </h3>
+              <p className="text-slate-600 text-lg leading-relaxed max-w-xl">
+                {isEs 
+                  ? 'No solo hacemos páginas web, construimos herramientas de negocio. Optimizamos cada línea de código y cada pixel para garantizar velocidad, accesibilidad y un impacto real en tus métricas.'
+                  : 'We don\'t just make websites, we build business tools. We optimize every line of code and every pixel to ensure speed, accessibility, and a real impact on your metrics.'}
+              </p>
+            </div>
           </motion.div>
-        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-24 pt-20 border-t border-[#C87941]/20"
-        >
-          <h3 className="text-3xl lg:text-4xl font-bold text-[#F5F0E8] mb-12 text-center">
-            {isEs ? 'Nuestros Servicios Especializados' : 'Our Specialized Services'}
-          </h3>
-          <div className="grid md:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <motion.div 
-                key={index}
-                whileHover={{ y: -8 }}
-                className="bg-[#0F0F1A]/40 p-8 rounded-2xl border border-[#C87941]/20 hover:border-[#C87941]/60 transition-all duration-300 shadow-lg group"
-              >
-                <div className="w-12 h-12 rounded-lg bg-[#C87941]/10 flex items-center justify-center mb-6 group-hover:bg-[#C87941]/20 transition-colors">
-                   <div className="w-6 h-6 bg-gradient-to-br from-[#C87941] to-[#E8B86D] rounded-sm" />
-                </div>
-                <h4 className="text-xl font-bold text-[#E8B86D] mb-4">
-                  {service.title}
-                </h4>
-                <p className="text-[#F5F0E8]/70 leading-relaxed text-sm">
-                  {service.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+          {/* Caja 2: Visión (Alta, color de marca) */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="md:col-span-1 bg-gradient-to-br from-[var(--virexa-blue)] to-[var(--virexa-cyan)] rounded-3xl p-10 shadow-lg flex flex-col text-white"
+          >
+            <span className="text-white/80 text-sm font-bold uppercase tracking-widest mb-4 block">
+              {isEs ? 'Visión' : 'Vision'}
+            </span>
+            <h3 className="text-2xl font-bold mb-4">
+              {isEs ? 'El Futuro es Digital y Ágil' : 'The Future is Digital & Agile'}
+            </h3>
+            <p className="text-white/90 leading-relaxed mb-8 flex-grow">
+              {isEs 
+                ? 'Ser el estándar de excelencia tecnológica para empresas que buscan escalar sin límites en la web moderna.'
+                : 'To be the standard of technological excellence for companies looking to scale without limits on the modern web.'}
+            </p>
+            <a href={`/${locale}/contact`} className="inline-flex items-center gap-2 font-bold text-white group">
+              {isEs ? 'Inicia tu proyecto' : 'Start your project'}
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+          </motion.div>
+
+          {/* Cajas de Servicios (3 seguidas) */}
+          {[
+            {
+              icon: <MonitorSmartphone className="w-8 h-8" />,
+              title: isEs ? "UX/UI Design" : "UX/UI Design",
+              desc: isEs ? "Interfaces intuitivas que enamoran y convierten." : "Intuitive interfaces that captivate and convert."
+            },
+            {
+              icon: <Code2 className="w-8 h-8" />,
+              title: isEs ? "Desarrollo Frontend" : "Frontend Dev",
+              desc: isEs ? "Arquitecturas web rápidas, seguras y escalables." : "Fast, secure, and scalable web architectures."
+            },
+            {
+              icon: <TrendingUp className="w-8 h-8" />,
+              title: isEs ? "Growth & Analytics" : "Growth & Analytics",
+              desc: isEs ? "Decisiones basadas en datos para maximizar el ROI." : "Data-driven decisions to maximize ROI."
+            }
+          ].map((service, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.3 + (i * 0.1) }}
+              className="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm hover:border-[var(--virexa-cyan)] hover:shadow-lg transition-all group"
+            >
+              <div className="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center text-[var(--virexa-blue)] mb-6 group-hover:bg-[var(--virexa-blue)] group-hover:text-white transition-colors">
+                {service.icon}
+              </div>
+              <h4 className="text-xl font-bold text-slate-900 mb-2">{service.title}</h4>
+              <p className="text-slate-500">{service.desc}</p>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

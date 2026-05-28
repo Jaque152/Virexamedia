@@ -16,7 +16,7 @@ export async function addToCart(planId: number, customPrice?: number, quoteId?: 
 
   // Verificamos si el item ya existe en el carrito
   const { data: existingItem } = await supabase
-    .from('cart_items_nc')
+    .from('cart_items_virexa')
     .select('id, quantity')
     .eq('plan_id', planId)
     .eq('session_id', sessionId)
@@ -25,12 +25,12 @@ export async function addToCart(planId: number, customPrice?: number, quoteId?: 
   if (existingItem && !customPrice) {
     // Si ya existe y es un plan normal, aumentamos cantidad
     await supabase
-      .from('cart_items_nc')
+      .from('cart_items_virexa')
       .update({ quantity: existingItem.quantity + 1 })
       .eq('id', existingItem.id);
   } else {
     // Si es nuevo o es un plan personalizado, creamos registro nuevo
-    await supabase.from('cart_items_nc').insert({
+    await supabase.from('cart_items_virexa').insert({
       plan_id: planId,
       session_id: sessionId,
       quantity: 1,
@@ -45,7 +45,7 @@ export async function addToCart(planId: number, customPrice?: number, quoteId?: 
 
 export async function removeFromCart(itemId: number) {
   const supabase = await createClient();
-  const { error } = await supabase.from('cart_items_nc').delete().eq('id', itemId);
+  const { error } = await supabase.from('cart_items_virexa').delete().eq('id', itemId);
   
   revalidatePath('/', 'layout');
   return { success: !error };
@@ -55,7 +55,7 @@ export async function updateQuantity(itemId: number, quantity: number) {
   if (quantity < 1) return removeFromCart(itemId);
   
   const supabase = await createClient();
-  await supabase.from('cart_items_nc').update({ quantity }).eq('id', itemId);
+  await supabase.from('cart_items_virexa').update({ quantity }).eq('id', itemId);
   
   revalidatePath('/', 'layout');
 }

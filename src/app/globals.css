@@ -3,132 +3,84 @@
 @tailwind utilities;
 
 :root {
-  /* Warm Luxurious Palette */
-  --background: 240 15% 6%;
-  --foreground: 40 30% 95%;
+  /* Fondo blanco brillante / gris muy tenue */
+  --background: 0 0% 100%; 
+  --foreground: 215 28% 17%; /* Slate 800 para alto contraste */
 
-  --card: 240 12% 10%;
-  --card-foreground: 40 30% 95%;
+  --card: 0 0% 100%;
+  --card-foreground: 215 28% 17%;
 
-  --popover: 240 12% 10%;
-  --popover-foreground: 40 30% 95%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 215 28% 17%;
 
-  --primary: 25 55% 52%;
-  --primary-foreground: 40 30% 95%;
+  /* Paleta Virexamedia */
+  --virexa-blue: #2196F3;
+  --virexa-cyan: #00BCD4;
+  --virexa-teal: #4DB6AC;
+  --virexa-silver: #F8FAFC; /* Slate 50 */
 
-  --secondary: 38 70% 66%;
-  --secondary-foreground: 240 15% 6%;
+  --primary: 207 90% 54%; /* Azul principal */
+  --primary-foreground: 0 0% 100%;
 
-  --muted: 240 10% 15%;
-  --muted-foreground: 40 20% 70%;
+  --secondary: 188 100% 42%; /* Cian */
+  --secondary-foreground: 0 0% 100%;
 
-  --accent: 38 70% 66%;
-  --accent-foreground: 240 15% 6%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%; /* Slate 500 */
 
-  --destructive: 0 62% 30%;
-  --destructive-foreground: 40 30% 95%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 215 28% 17%;
 
-  --border: 240 10% 18%;
-  --input: 240 10% 18%;
-  --ring: 25 55% 52%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 207 90% 54%;
 
-  --radius: 0.75rem;
-
-  /* Custom colors */
-  --copper: #C87941;
-  --amber: #E8B86D;
-  --cream: #F5F0E8;
-  --navy: #0F0F1A;
-  --charcoal: #1A1B2E;
+  --radius: 0.5rem;
 }
 
 @layer base {
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
   }
-
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Outfit', sans-serif; 
+    font-weight: 700;
   }
-
   ::selection {
-    background: var(--copper);
-    color: var(--cream);
+    background: var(--virexa-cyan);
+    color: white;
   }
 }
 
 @layer utilities {
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, var(--copper) 0%, var(--amber) 100%);
-  }
-
-  .bg-grain {
-    position: relative;
+    background-image: linear-gradient(90deg, var(--virexa-blue) 0%, var(--virexa-cyan) 50%, var(--virexa-teal) 100%);
   }
 
   .bg-grain::before {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    opacity: 0.03;
+    /* Un grano casi imperceptible para dar textura sutil al fondo blanco */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.02; 
     pointer-events: none;
     z-index: 1;
   }
-
-  .scrollbar-hidden {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  .scrollbar-hidden::-webkit-scrollbar {
-    display: none;
-  }
-
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
-  }
-
-  .animate-pulse-slow {
-    animation: pulse-slow 4s ease-in-out infinite;
-  }
-
-  @keyframes pulse-slow {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 0.8; }
-  }
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
-
 ::-webkit-scrollbar-track {
-  background: var(--navy);
+  background: var(--virexa-silver);
 }
-
 ::-webkit-scrollbar-thumb {
-  background: var(--copper);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--amber);
+  background: var(--virexa-blue);
+  border-radius: 10px;
 }

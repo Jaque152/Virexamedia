@@ -17,7 +17,7 @@ export interface Plan {
   image_url: string | null;
   is_active: boolean;
   created_at: string;
-  categories_nc?: Category; 
+  categories_virexa?: Category; 
 }
 
 export interface CartItem {
@@ -28,7 +28,7 @@ export interface CartItem {
   custom_price: number | null; 
   quote_id: string | null;     
   created_at: string;
-  plans_nc?: Plan; 
+  plans_virexa?: Plan; 
 }
 
 export interface Checkout {

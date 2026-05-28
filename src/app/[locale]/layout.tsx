@@ -5,24 +5,15 @@ import { Navigation } from "@/components/shared/Navigation";
 import { Footer } from "@/components/shared/Footer";
 import { NextIntlClientProvider } from 'next-intl';
 
-import { Playfair_Display, DM_Sans } from "next/font/google";
+import { Outfit, Inter } from "next/font/google";
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
-});
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
-});
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Marketing Resultados ",
-  description: "A marketing agency focused on helping businesses grow with disruptive communication, strategic events, and targeted strategies.",
-  icons: {
-    icon: "/favicon.ico",
-  },
+  title: "Virexamedia | Digital Marketing & UX",
+  description: "A specialized agency in scaling businesses through digital marketing, agile development, and UI/UX design.",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default async function LocaleLayout({
@@ -35,8 +26,7 @@ export default async function LocaleLayout({
   const { locale } = await params;
 
   return (
-
-    <html lang={locale} className={`${playfair.variable} ${dmSans.variable} scroll-smooth`}>
+    <html lang={locale} className={`${outfit.variable} ${inter.variable} scroll-smooth`}>
       <body className="bg-background text-foreground antialiased min-h-screen flex flex-col font-sans">
         <NextIntlClientProvider locale={locale} messages={{}}>
           <ClientBody>

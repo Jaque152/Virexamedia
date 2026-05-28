@@ -2,9 +2,9 @@ import { createClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { AddToCartButton } from './AddToCartButton';
-import { ArrowLeft, CheckCircle2 } from 'lucide-react';
-import { T } from '@/components/shared/T'; // Componente traductor del servidor
-import { getTranslation } from '@/lib/translator'; // Función pura para metadata
+import { ArrowLeft, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { T } from '@/components/shared/T';
+import { getTranslation } from '@/lib/translator';
 
 // === 1. METADATOS SEO DINÁMICOS TRADUCIDOS ===
 export async function generateMetadata({ 
@@ -15,16 +15,15 @@ export async function generateMetadata({
   const { locale, slug } = await params; 
   
   const supabase = await createClient();
-  const { data: plan } = await supabase.from('plans_nc').select('title, description').eq('slug', slug).single();
+  const { data: plan } = await supabase.from('plans_virexa').select('title, description').eq('slug', slug).single();
   
-  if (!plan) return { title: 'Plan no encontrado | Marketing Recursos' };
+  if (!plan) return { title: 'Solución no encontrada | Virexamedia' };
   
-  // Traducimos antes de enviar el Metadata al navegador
   const translatedTitle = await getTranslation(plan.title, locale);
   const translatedDescription = await getTranslation(plan.description, locale);
 
   return {
-    title: `${translatedTitle} | Marketing Recursos`,
+    title: `${translatedTitle} | Virexamedia`,
     description: translatedDescription,
   };
 }
@@ -41,8 +40,8 @@ export default async function PlanDetailPage({
   const supabase = await createClient();
 
   const { data: plan } = await supabase
-    .from('plans_nc')
-    .select('*, categories_nc(name)')
+    .from('plans_virexa')
+    .select('*, categories_virexa(name)')
     .eq('slug', slug)
     .single();
 
@@ -61,43 +60,45 @@ export default async function PlanDetailPage({
   }
 
   return (
-    <main className="min-h-screen bg-[var(--navy)] bg-grain pt-32 pb-24 text-[var(--cream)] relative">
-      <div className="container mx-auto px-6 lg:px-8 max-w-7xl relative z-10">
+    <main className="min-h-screen bg-white pt-32 pb-24 text-slate-900 relative">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         
         <Link 
           href={`/${locale}/services`}
-          className="inline-flex items-center gap-2 text-[var(--cream)]/60 hover:text-[var(--copper)] transition-colors mb-12 font-sans font-medium uppercase tracking-widest text-sm"
+          className="inline-flex items-center gap-2 text-slate-400 hover:text-[var(--virexa-blue)] transition-colors mb-12 font-bold text-sm"
         >
           <ArrowLeft className="w-4 h-4" />
-          {isEs ? 'Volver al catálogo' : 'Back to catalog'}
+          {isEs ? 'Volver a soluciones' : 'Back to solutions'}
         </Link>
 
-        <div className="grid lg:grid-cols-12 gap-12 items-start">
+        <div className="flex flex-col lg:flex-row gap-16 items-start">
           
-          {/* COLUMNA IZQUIERDA */}
-          <div className="lg:col-span-8 space-y-10">
+          {/* COLUMNA IZQUIERDA: Detalles del producto */}
+          <div className="w-full lg:w-7/12 space-y-12">
             <div>
-              <span className="text-[var(--copper)] text-sm font-bold uppercase tracking-[0.3em] font-sans mb-4 block">
-                {plan.categories_nc?.name ? <T>{plan.categories_nc.name}</T> : <T>Marketing</T>}
+              <span className="inline-block py-1 px-3 rounded-md bg-[var(--virexa-blue)]/10 text-[var(--virexa-blue)] text-xs font-bold uppercase tracking-widest mb-6">
+                {plan.categories_virexa?.name ? <T>{plan.categories_virexa.name}</T> : <T>Tecnología</T>}
               </span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-serif leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1]">
                 <T>{plan.title}</T>
               </h1>
-              <p className="mt-6 text-xl text-[var(--cream)]/70 font-sans leading-relaxed max-w-3xl">
+              <p className="mt-8 text-xl text-slate-500 leading-relaxed">
                 <T>{plan.description}</T>
               </p>
             </div>
 
-            {/* Lista de características traducidas con <T> */}
-            <div className="bg-[var(--charcoal)] border border-[var(--copper)]/10 rounded-[2rem] p-8 md:p-12">
-              <h3 className="text-2xl font-serif font-bold mb-8 text-[var(--amber)]">
-                {isEs ? '¿Qué incluye esta estrategia?' : 'What is included in this strategy?'}
+            {/* Lista de características minimalista */}
+            <div className="pt-8 border-t border-slate-100">
+              <h3 className="text-2xl font-bold mb-8 text-slate-900">
+                {isEs ? 'Especificaciones de la solución' : 'Solution Specifications'}
               </h3>
-              <ul className="space-y-6">
+              <ul className="space-y-5">
                 {featuresList.map((feature, idx) => (
-                  <li key={idx} className="flex gap-4 items-start font-sans">
-                    <CheckCircle2 className="w-6 h-6 text-[var(--copper)] shrink-0 mt-0.5" />
-                    <span className="text-lg text-[var(--cream)]/80 leading-relaxed">
+                  <li key={idx} className="flex gap-4 items-start bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                    <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center border border-slate-200 shrink-0">
+                      <CheckCircle2 className="w-5 h-5 text-[var(--virexa-blue)]" />
+                    </div>
+                    <span className="text-slate-700 leading-relaxed font-medium pt-1">
                       <T>{feature}</T>
                     </span>
                   </li>
@@ -106,38 +107,36 @@ export default async function PlanDetailPage({
             </div>
           </div>
 
-          {/* COLUMNA DERECHA */}
-          <div className="lg:col-span-4 sticky top-32">
-            <div className="bg-[var(--charcoal)] border border-[var(--copper)]/20 rounded-[2rem] p-8 relative overflow-hidden shadow-2xl shadow-black/50">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[var(--copper)]/10 to-transparent rounded-full blur-[50px] -translate-y-1/2 translate-x-1/2" />
-              <div className="relative z-10">
-                <div className="mb-2">
-                  <span className="text-[var(--cream)]/50 uppercase tracking-widest text-xs font-bold font-sans">
-                    {isEs ? 'Inversión' : 'Investment'}
-                  </span>
+          {/* COLUMNA DERECHA: Tarjeta de Inversión Flotante */}
+          <div className="w-full lg:w-5/12 lg:sticky lg:top-32">
+            <div className="bg-white border border-slate-200 rounded-[2rem] p-8 md:p-10 shadow-2xl shadow-slate-200/50">
+              
+              <div className="mb-2">
+                <span className="text-slate-400 uppercase tracking-widest text-xs font-bold">
+                  {isEs ? 'Inversión del Proyecto' : 'Project Investment'}
+                </span>
+              </div>
+              
+              <div className="mb-8">
+                <div className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight mb-2">
+                  {formatPrice(plan.price)}
                 </div>
-                
-                <div className="mb-8">
-                  <div className="text-4xl font-bold text-gradient font-sans mb-1">
-                    {formatPrice(plan.price)}
-                  </div>
-                  <div className="text-[var(--cream)]/40 text-sm uppercase tracking-widest font-sans">
-                    {isEs ? 'IVA (16%) Incluido' : 'Taxes Included'}
-                  </div>
+                <div className="text-slate-400 text-sm font-medium">
+                  {isEs ? 'Facturación única • IVA Incluido' : 'One-time billing • Taxes Included'}
                 </div>
+              </div>
 
-                <div className="h-px w-full bg-gradient-to-r from-[var(--copper)]/30 to-transparent mb-8" />
-
-                <AddToCartButton planId={plan.id} />
-
-                <div className="mt-6 text-center space-y-2 font-sans">
-                  <p className="text-sm text-[var(--cream)]/50">
-                    {isEs ? 'Pago 100% seguro y encriptado.' : '100% secure and encrypted payment.'}
-                  </p>
-                  <p className="text-xs text-[var(--cream)]/30">
-                    Powered by Etomin
-                  </p>
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-3 text-sm text-slate-600">
+                  <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                  {isEs ? 'Garantía de calidad técnica' : 'Technical quality guarantee'}
                 </div>
+              </div>
+
+              <AddToCartButton planId={plan.id} />
+
+              <div className="mt-6 text-center text-xs text-slate-400 font-medium">
+                <p>{isEs ? 'Transacción encriptada de extremo a extremo.' : 'End-to-end encrypted transaction.'}</p>
               </div>
             </div>
           </div>

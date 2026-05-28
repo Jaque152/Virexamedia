@@ -38,8 +38,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (!sessionId) return;
 
     const { data, error } = await supabase
-      .from('cart_items_nc')
-      .select('*, plans_nc(*)')
+      .from('cart_items_virexa')
+      .select('*, plans_virexa(*)')
       .eq('session_id', sessionId) 
       .order('created_at', { ascending: false });
     
@@ -55,7 +55,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const sessionId = getSessionId();
     const numericPlanId = Number(planId);
     const { data, error } = await supabase
-      .from('cart_items_nc')
+      .from('cart_items_virexa')
       .insert({
         session_id: sessionId,
         plan_id: numericPlanId,
@@ -63,7 +63,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         custom_price: customPrice,
         quote_id: quoteId
       })
-      .select('*, plans_nc(*)')
+      .select('*, plans_virexa(*)')
       .single();
 
     if (error || !data) {
@@ -80,7 +80,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const removeFromCart = useCallback(async (cartItemId: number) => {
     // 1. Borramos de la BD
     const { error } = await supabase
-      .from('cart_items_nc')
+      .from('cart_items_virexa')
       .delete()
       .eq('id', cartItemId);
 
@@ -105,7 +105,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     return items.reduce((acc, item) => {
       const price = item.custom_price !== null 
         ? Number(item.custom_price) 
-        : Number(item.plans_nc?.price || 0);
+        : Number(item.plans_virexa?.price || 0);
         
       return acc + (price * item.quantity);
     }, 0);

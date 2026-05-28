@@ -12,27 +12,27 @@ function requireEnvVar(name: string): string {
   return value;
 }
 
-const getEtominHeaders = (extraHeaders = {}) => ({
+const getOctanoHeaders = (extraHeaders = {}) => ({
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'User-Agent': 'Marketing Recursos/1.0',
+  'User-Agent': 'Explonix/1.0', // Puedes ajustar el User-Agent
   ...extraHeaders
 });
 
-async function safeEtominFetch(url: string, options: RequestInit, stepName: string) {
+async function safeOctanoFetch(url: string, options: RequestInit, stepName: string) {
   try {
-    console.log(`📡 [Etomin] Conectando a: ${url}`);
+    console.log(`📡 [Octano] Conectando a: ${url}`);
     const res = await fetch(url, options);
     const text = await res.text();
     
     if (!res.ok) {
-      console.warn(`⚠️ [Etomin] Código HTTP ${res.status} en ${stepName}`);
+      console.warn(`⚠️ [Octano] Código HTTP ${res.status} en ${stepName}`);
     }
 
     try {
       return JSON.parse(text);
     } catch (parseError) {
-      console.error(`[Etomin API Error - ${stepName}]: El servidor no devolvió JSON. HTTP Status: ${res.status}`);
+      console.error(`[Octano API Error - ${stepName}]: El servidor no devolvió JSON. HTTP Status: ${res.status}`);
       console.error(` Snippet del HTML recibido:\n`, text.substring(0, 300));
       
       throw new Error(`Error ${res.status}: La ruta de pago es incorrecta o está bloqueada.`);
@@ -53,29 +53,37 @@ export async function processCheckout(formData: CheckoutPayload) {
       requireEnvVar('SUPABASE_SERVICE_ROLE_KEY')
     );
 
-    const ETOMIN_BASE_URL = requireEnvVar('ETOMIN_BASE_URL');
-    const ETOMIN_EMAIL = requireEnvVar('ETOMIN_EMAIL');
-    const ETOMIN_PASSWORD = requireEnvVar('ETOMIN_PASSWORD');
+    // Cambia estas variables en tu archivo .env
+    const OCTANO_BASE_URL = requireEnvVar('OCTANO_BASE_URL');
+    const OCTANO_EMAIL = requireEnvVar('OCTANO_EMAIL');
+    const OCTANO_PASSWORD = requireEnvVar('OCTANO_PASSWORD');
 
-    // 1. LOGIN
-    const signinData = await safeEtominFetch(`${ETOMIN_BASE_URL}/signin`, {
+    // 1. LOGIN 
+    const loginParams = new URLSearchParams();
+    loginParams.append('email', OCTANO_EMAIL);
+    loginParams.append('password', OCTANO_PASSWORD);
+
+    const signinData = await safeOctanoFetch(`${OCTANO_BASE_URL}/signin`, {
       method: 'POST',
-      headers: getEtominHeaders(),
-      body: JSON.stringify({ email: ETOMIN_EMAIL, password: ETOMIN_PASSWORD })
-    }, 'Login Etomin');
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      },
+      body: loginParams.toString()
+    }, 'Login Octano');
 
     if (!signinData.authToken) throw new Error("Credenciales del procesador rechazadas.");
     
     // 2. TOKENIZAR
-    const tokenData = await safeEtominFetch(`${ETOMIN_BASE_URL}/card/tokenizer`, {
+    const tokenData = await safeOctanoFetch(`${OCTANO_BASE_URL}/card/tokenizer`, {
       method: 'POST',
-      headers: getEtominHeaders({ 'Authorization': `Bearer ${signinData.authToken}` }),
+      headers: getOctanoHeaders({ 'Authorization': `Bearer ${signinData.authToken}` }),
       body: JSON.stringify({
         cardData: {
-          cardNumber: cardInfo.number,
+          cardNumber: cardInfo.number.replace(/\s+/g, ''), // Asegurar limpieza de espacios según PHP
           cardholderName: cardInfo.name,
-          expirationMonth: cardInfo.expiry.split('/')[0],
-          expirationYear: cardInfo.expiry.split('/')[1],
+          expirationMonth: cardInfo.expiry.split('/')[0].trim(),
+          expirationYear: cardInfo.expiry.split('/')[1].trim(),
         }
       })
     }, 'Tokenización');
@@ -90,29 +98,32 @@ export async function processCheckout(formData: CheckoutPayload) {
       customerInformation: {
         firstName: contactInfo.firstName,
         lastName: contactInfo.lastName,
+        middleName: '',
         email: contactInfo.email,
         phone1: contactInfo.phone,
         city: billingInfo.localidad,
         address1: billingInfo.direccion,
         postalCode: billingInfo.codigo_postal,
         state: billingInfo.estado,
-        country: 'MX'
+        country: 'MX',
+        ip: '127.0.0.1' // Requerido comúnmente para validaciones antifraude
       },
       cardData: {
         cardNumberToken: tokenData.cardNumberToken,
         cvv: cardInfo.cvv
       },
       items: items.map((i: CartItem) => ({
-        title: i.plans_nc?.title || 'Estrategia Personalizada',
-        amount: i.custom_price || i.plans_nc?.price || 0,
+        title: i.plans_virexa?.title || 'Estrategia Personalizada',
+        amount: i.custom_price || i.plans_virexa?.price || 0,
         quantity: i.quantity,
         id: i.plan_id.toString()
-      }))
+      })),
+      redirectUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://tusitio.com' // Octano requiere un redirectUrl para flujos 3DS
     };
 
-    const saleData = await safeEtominFetch(`${ETOMIN_BASE_URL}/sale`, {
+    const saleData = await safeOctanoFetch(`${OCTANO_BASE_URL}/sale`, {
       method: 'POST',
-      headers: getEtominHeaders({ 'Authorization': `Bearer ${signinData.authToken}` }),
+      headers: getOctanoHeaders({ 'Authorization': `Bearer ${signinData.authToken}` }),
       body: JSON.stringify(salePayload)
     }, 'Procesar Venta');
 
@@ -123,7 +134,7 @@ export async function processCheckout(formData: CheckoutPayload) {
     // 4. GUARDAR EN BD
     const subtotalCalc = total / 1.16;
     const { data: checkoutRecord, error: dbError } = await supabaseAdmin
-      .from('checkouts_nc')
+      .from('checkouts_virexa')
       .insert({
         session_id: `session_${Date.now()}`, 
         nombre: contactInfo.firstName,
@@ -154,12 +165,12 @@ export async function processCheckout(formData: CheckoutPayload) {
       checkout_id: checkoutRecord.id,
       plan_id: item.plan_id,
       quantity: item.quantity,
-      unit_price: item.plans_nc?.price || 0,
+      unit_price: item.plans_virexa?.price || 0,
       custom_price: item.custom_price,
       quote_id: item.quote_id
     }));
 
-    const { error: itemsError } = await supabaseAdmin.from('checkout_items_nc').insert(checkoutItems);
+    const { error: itemsError } = await supabaseAdmin.from('checkout_items_virexa').insert(checkoutItems);
     if (itemsError) console.error("[CRÍTICO] Detalle del error en Items:", itemsError);
 
     // 6. ENVIAR CORREO

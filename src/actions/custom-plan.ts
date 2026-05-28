@@ -15,7 +15,7 @@ export async function processCustomPlan(formData: CustomPlanFormData) {
     const supabase = await createClient();
 
     const { data: planData, error: planError } = await supabase
-      .from('plans_nc')
+      .from('plans_virexa')
       .select('id')
       .eq('slug', 'plan-personalizado')
       .single();
@@ -26,7 +26,7 @@ export async function processCustomPlan(formData: CustomPlanFormData) {
 
     // 2. Usamos el folio que escribió el usuario directamente
     const { error: insertError } = await supabase
-      .from('custom_plan_payments_nc')
+      .from('custom_plan_payments_virexa')
       .insert({
         nombre: formData.nombre,
         apellidos: formData.apellidos,

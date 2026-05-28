@@ -3,7 +3,7 @@
 import { useLocale } from 'next-intl';
 import Link from 'next/link';
 import { useCart } from '@/hooks/use-cart';
-import { Trash2, ArrowRight, ShoppingBag } from 'lucide-react';
+import { Trash2, ArrowRight, PackageOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CartItem } from '@/types';
 
@@ -16,22 +16,20 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <main className="min-h-screen bg-background bg-grain pt-32 pb-24 flex items-center justify-center px-4 relative">
-        <div className="text-center relative z-10 max-w-md mx-auto">
-          <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mx-auto mb-6">
-            <ShoppingBag className="w-10 h-10 text-muted-foreground" />
-          </div>
-          <h1 className="text-3xl font-bold mb-4 text-foreground">
-            {locale === 'es' ? 'Tu carrito está vacío' : 'Your cart is empty'}
+      <main className="min-h-screen bg-slate-50 pt-32 pb-24 flex items-center justify-center px-4">
+        <div className="text-center max-w-md mx-auto bg-white p-12 rounded-3xl shadow-sm border border-slate-100">
+          <PackageOpen className="w-20 h-20 text-slate-300 mx-auto mb-6" />
+          <h1 className="text-2xl font-bold mb-4 text-slate-900">
+            {locale === 'es' ? 'Tu espacio de trabajo está vacío' : 'Your workspace is empty'}
           </h1>
-          <p className="text-muted-foreground mb-8">
+          <p className="text-slate-500 mb-8">
             {locale === 'es' 
-              ? 'Parece que aún no has seleccionado ninguna estrategia para potenciar tu marca.' 
-              : 'It looks like you haven\'t selected any strategy to boost your brand yet.'}
+              ? 'Aún no has añadido ninguna solución tecnológica a tu proyecto.' 
+              : 'You haven\'t added any technological solution to your project yet.'}
           </p>
-          <Button asChild className="w-full bg-primary hover:opacity-90 text-primary-foreground h-14 rounded-lg font-bold">
+          <Button asChild className="w-full bg-[var(--virexa-blue)] hover:bg-[var(--virexa-cyan)] text-white h-14 rounded-xl font-bold transition-colors">
             <Link href={`/${locale}/services`}>
-              {locale === 'es' ? 'Explorar Servicios' : 'Explore Services'}
+              {locale === 'es' ? 'Explorar Soluciones' : 'Explore Solutions'}
             </Link>
           </Button>
         </div>
@@ -40,101 +38,97 @@ export default function CartPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background bg-grain pt-32 pb-24 text-foreground relative">
-      <div className="container mx-auto px-4 max-w-6xl relative z-10">
-        <h1 className="text-4xl md:text-5xl font-bold mb-12 text-gradient">
-          {locale === 'es' ? 'Tu Carrito' : 'Your Cart'}
+    <main className="min-h-screen bg-slate-50 pt-32 pb-24">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        
+        <h1 className="text-4xl md:text-5xl font-bold mb-12 text-slate-900 tracking-tight">
+          {locale === 'es' ? 'Resumen de Inversión' : 'Investment Summary'}
         </h1>
 
-        <div className="grid lg:grid-cols-12 gap-10 items-start">
-          <div className="lg:col-span-8 space-y-4">
-            <div className="bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
-              <div className="hidden md:grid grid-cols-12 gap-4 p-6 border-b border-border text-sm font-bold text-muted-foreground uppercase tracking-wider">
-                <div className="col-span-6">{locale === 'es' ? 'Servicio' : 'Service'}</div>
-                <div className="col-span-2 text-center">{locale === 'es' ? 'Cantidad' : 'Quantity'}</div>
-                <div className="col-span-3 text-right">{locale === 'es' ? 'Precio' : 'Price'}</div>
-                <div className="col-span-1"></div>
-              </div>
+        <div className="flex flex-col lg:flex-row gap-10 items-start">
+          
+          {/* Lista de Items - Estilo Tarjetas Independientes */}
+          <div className="w-full lg:w-2/3 space-y-6">
+            {items.map((item: CartItem) => {
+              const itemPrice = item.custom_price !== null 
+                ? Number(item.custom_price) 
+                : Number(item.plans_virexa?.price || 0);
 
-              <div className="divide-y divide-border">
-                {items.map((item: CartItem) => {
-                  const itemPrice = item.custom_price !== null 
-                    ? Number(item.custom_price) 
-                    : Number(item.plans_nc?.price || 0);
-
-                  return (
-                    <div key={item.id} className="p-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                      <div className="col-span-1 md:col-span-6">
-                        <h3 className="font-bold text-lg text-foreground mb-1">
-                          {/* VUELVE A LA NORMALIDAD AQUÍ TAMBIÉN */}
-                          {item.plans_nc?.title || (locale === 'es' ? 'Estrategia Personalizada' : 'Custom Strategy')}
-                        </h3>
-                        {item.quote_id && (
-                          <span className="inline-block bg-primary/10 text-primary text-xs px-2 py-1 rounded font-mono">
-                            Ref: {item.quote_id}
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="col-span-1 md:col-span-2 md:text-center text-muted-foreground">
-                        <span className="md:hidden font-bold mr-2">{locale === 'es' ? 'Cantidad:' : 'Quantity:'}</span> 
-                        {item.quantity}
-                      </div>
-
-                      <div className="col-span-1 md:col-span-3 md:text-right font-bold text-lg">
-                        <span className="md:hidden font-bold text-muted-foreground font-normal mr-2">{locale === 'es' ? 'Precio:' : 'Price:'}</span>
-                        {formatPrice(itemPrice * item.quantity)}
-                      </div>
-
-                      <div className="col-span-1 md:col-span-1 flex md:justify-end mt-4 md:mt-0">
-                        <button 
-                          onClick={() => removeFromCart(item.id)}
-                          className="text-muted-foreground hover:text-destructive transition-colors p-2 rounded-md hover:bg-destructive/10"
-                          title={locale === 'es' ? 'Eliminar del carrito' : 'Remove from cart'}
-                        >
-                          <Trash2 className="w-5 h-5" />
-                        </button>
-                      </div>
+              return (
+                <div key={item.id} className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 group hover:border-[var(--virexa-blue)]/30 transition-colors">
+                  
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="font-bold text-2xl text-slate-900">
+                        {item.plans_virexa?.title || (locale === 'es' ? 'Desarrollo a Medida' : 'Custom Development')}
+                      </h3>
+                      <span className="bg-slate-100 text-slate-600 text-xs px-3 py-1 rounded-full font-bold">
+                        x{item.quantity}
+                      </span>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
+                    {item.quote_id && (
+                      <span className="text-[var(--virexa-blue)] text-sm font-mono font-medium">
+                        REF: {item.quote_id}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-8 w-full md:w-auto justify-between border-t border-slate-100 md:border-0 pt-4 md:pt-0">
+                    <div className="text-left md:text-right">
+                      <span className="block text-sm text-slate-400 font-medium md:hidden mb-1">
+                        {locale === 'es' ? 'Subtotal' : 'Subtotal'}
+                      </span>
+                      <span className="font-bold text-2xl text-slate-900">
+                        {formatPrice(itemPrice * item.quantity)}
+                      </span>
+                    </div>
+                    <button 
+                      onClick={() => removeFromCart(item.id)}
+                      className="w-12 h-12 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-red-50 hover:text-red-500 transition-colors"
+                      title={locale === 'es' ? 'Eliminar' : 'Remove'}
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
-          <div className="lg:col-span-4 bg-card p-8 border border-border rounded-2xl shadow-lg sticky top-32">
-            <h2 className="text-xl font-bold mb-6 border-b border-border pb-4">
-              {locale === 'es' ? 'Resumen del Pedido' : 'Order Summary'}
+          {/* Panel Lateral de Pago - Contrastante */}
+          <div className="w-full lg:w-1/3 bg-slate-900 text-white p-8 md:p-10 rounded-3xl shadow-xl sticky top-32">
+            <h2 className="text-2xl font-bold mb-8">
+              {locale === 'es' ? 'Desglose' : 'Breakdown'}
             </h2>
             
-            <div className="space-y-4 mb-6 font-sans">
-              <div className="flex justify-between items-center text-muted-foreground">
+            <div className="space-y-4 mb-8 text-slate-300">
+              <div className="flex justify-between items-center">
                 <span>Subtotal</span>
-                <span className="text-foreground font-medium">{formatPrice(total / 1.16)}</span>
+                <span className="font-medium text-white">{formatPrice(total / 1.16)}</span>
               </div>
-              <div className="flex justify-between items-center text-muted-foreground">
-                <span>{locale === 'es' ? 'Impuesto (16%)' : 'Tax (16%)'}</span>
-                <span className="text-foreground font-medium">{formatPrice(total - (total / 1.16))}</span>
+              <div className="flex justify-between items-center">
+                <span>{locale === 'es' ? 'IVA (16%)' : 'Tax (16%)'}</span>
+                <span className="font-medium text-white">{formatPrice(total - (total / 1.16))}</span>
               </div>
-              <div className="border-t border-border pt-4 mt-4 flex justify-between items-center text-xl font-bold text-gradient">
-                <span>{locale === 'es' ? 'Total Estimado' : 'Estimated Total'}</span>
-                <span>{formatPrice(total)}</span>
-              </div>
+            </div>
+
+            <div className="border-t border-slate-700 pt-6 mb-10">
+              <span className="block text-sm text-[var(--virexa-cyan)] uppercase tracking-widest font-bold mb-2">
+                {locale === 'es' ? 'Total' : 'Total'}
+              </span>
+              <span className="text-4xl font-bold text-white">
+                {formatPrice(total)}
+              </span>
             </div>
             
-            <Button asChild
-              className="w-full bg-primary hover:opacity-90 text-primary-foreground font-bold h-14 rounded-lg text-lg group transition-all p-0" >
-              <Link href={`/${locale}/checkout`} className="flex items-center justify-center w-full h-full">
-                {locale === 'es' ? 'Proceder al Pago' : 'Proceed to Checkout'} <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <Button asChild className="w-full bg-gradient-to-r from-[var(--virexa-blue)] to-[var(--virexa-cyan)] hover:opacity-90 text-white font-bold h-16 rounded-2xl text-lg transition-all border-0 shadow-lg shadow-[var(--virexa-blue)]/20">
+              <Link href={`/${locale}/checkout`} className="flex items-center justify-center">
+                {locale === 'es' ? 'Continuar al Checkout' : 'Proceed to Checkout'} 
+                <ArrowRight className="ml-2 w-5 h-5" />
               </Link>
             </Button>
-
-            <div className="mt-4 text-center">
-              <Link href={`/${locale}/services`} className="text-sm text-muted-foreground hover:text-primary transition-colors underline underline-offset-4">
-                {locale === 'es' ? 'Continuar explorando servicios' : 'Continue exploring services'}
-              </Link>
-            </div>
           </div>
+
         </div>
       </div>
     </main>

@@ -7,7 +7,7 @@ export async function submitContact(formData: ContactFormData, locale: string = 
     const supabase = await createClient();
     
     // 1. Guardar en Base de Datos
-    const { error } = await supabase.from('contacts_nc').insert({
+    const { error } = await supabase.from('contacts_virexa').insert({
       nombre_completo: formData.nombre_completo,
       empresa_negocio: formData.empresa_negocio,
       telefono: formData.telefono,
