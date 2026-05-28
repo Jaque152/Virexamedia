@@ -21,7 +21,7 @@ export function Navigation() {
   const navLinks = [
     { name: locale === 'es' ? "Soluciones" : "Solutions", href: `/${locale}/services` },
     { name: locale === 'es' ? "Nosotros" : "About Us", href: `/${locale}/about` },
-    { name: locale === 'es' ? "Planes" : "Plans", href: `/${locale}/pricing` },
+    { name: locale === 'es' ? "Soluciones Personalizadas" : "Custom Solutions", href: `/${locale}/pricing` },
     { name: locale === 'es' ? "Contacto" : "Contact", href: `/${locale}/contact` },
   ];
 
