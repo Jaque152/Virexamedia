@@ -88,8 +88,8 @@ export default function CheckoutContent() {
     /* SPLIT SCREEN LAYOUT */
     <main className="min-h-screen flex flex-col-reverse lg:flex-row bg-white">
       
-      {/* LADO IZQUIERDO: Formulario (Fondo Blanco) */}
-      <div className="w-full lg:w-[60%] p-8 md:p-16 lg:p-24 pt-32">
+      {/* LADO IZQUIERDO: Formulario  */}
+      <div className="w-full lg:w-[60%] p-8 py-12 md:p-16 lg:p-24 lg:pt-32">
         <Link href={`/${locale}/cart`} className="inline-flex items-center text-slate-500 hover:text-[var(--virexa-blue)] font-medium mb-10 transition-colors">
           <ArrowLeft className="w-4 h-4 mr-2" />
           {isEs ? 'Volver al carrito' : 'Back to cart'}
@@ -159,7 +159,7 @@ export default function CheckoutContent() {
       </div>
 
       {/* LADO DERECHO: Resumen de Orden (Fondo Azul Claro/Cian) */}
-      <div className="w-full lg:w-[40%] bg-slate-50 border-b lg:border-b-0 lg:border-l border-slate-200 p-8 md:p-16 lg:p-24 lg:sticky top-0 lg:h-screen overflow-y-auto">
+      <div className="w-full lg:w-[40%] bg-slate-50 border-b lg:border-b-0 lg:border-l border-slate-200 p-8 pt-28 md:p-16 md:pt-32 lg:p-24 lg:pt-32 lg:sticky top-0 lg:h-screen overflow-y-auto">
         <h3 className="text-xl font-bold text-slate-900 mb-8">
           {isEs ? 'Resumen del Proyecto' : 'Project Summary'}
         </h3>

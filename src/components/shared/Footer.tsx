@@ -25,9 +25,9 @@ export function Footer() {
       { name: locale === 'es' ? "Soluciones Personalizadas" : "Custom Solutions", href: `/${locale}/pricing` },
     ],
     legal: [
-      { name: locale === 'es' ? "Aviso dePrivacidad" : "Privacy Policy", href: `/${locale}/legal/privacy` },
+      { name: locale === 'es' ? "Aviso de Privacidad" : "Privacy Policy", href: `/${locale}/legal/privacy` },
       { name: locale === 'es' ? "Términos y Condiciones" : "Terms and Conditions", href: `/${locale}/legal/terms-conditions` },
-      { name: locale === 'es' ? "Política de Devoluciones y Reembolsos" : "Returns and Refunds Policy", href: `/${locale}/legal/returns-refunds` },
+      { name: locale === 'es' ? "Política de Devoluciones y Reembolsos" : "Returns and Refunds Policy", href: `/${locale}/legal/cancellation` },
     ],
   };
 
