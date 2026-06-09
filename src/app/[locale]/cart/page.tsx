@@ -100,15 +100,15 @@ export default function CartPage() {
             <h2 className="text-2xl font-bold mb-8">
               {locale === 'es' ? 'Desglose' : 'Breakdown'}
             </h2>
-            
+
             <div className="space-y-4 mb-8 text-slate-300">
               <div className="flex justify-between items-center">
                 <span>Subtotal</span>
-                <span className="font-medium text-white">{formatPrice(total / 1.16)}</span>
+                <span className="font-medium text-white">{formatPrice(total)}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span>{locale === 'es' ? 'IVA (16%)' : 'Tax (16%)'}</span>
-                <span className="font-medium text-white">{formatPrice(total - (total / 1.16))}</span>
+                <span>{locale === 'es' ? 'IVA (16%)' : 'VAT (16%)'}</span>
+                <span className="font-medium text-white">{formatPrice(total * 0.16)}</span>
               </div>
             </div>
 
@@ -117,7 +117,7 @@ export default function CartPage() {
                 {locale === 'es' ? 'Total' : 'Total'}
               </span>
               <span className="text-4xl font-bold text-white">
-                {formatPrice(total)}
+                {formatPrice(total * 1.16)}
               </span>
             </div>
             

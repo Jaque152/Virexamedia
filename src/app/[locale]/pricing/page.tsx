@@ -118,7 +118,7 @@ export default function CustomPricingPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-bold text-slate-900">{isEs ? 'Inversión Acordada (MXN)' : 'Agreed Investment (MXN)'}</label>
+                    <label className="text-sm font-bold text-slate-900">{isEs ? 'Inversión Acordada (MXN) + IVA (16%)' : 'Agreed Investment (MXN) + VAT (16%)'}</label>
                     <div className="relative">
                       <span className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-lg">$</span>
                       <Input type="number" min="0" step="0.01" required value={formData.monto || ""} onChange={(e) => setFormData({...formData, monto: Number(e.target.value)})} className={`${inputClass} pl-10 text-xl font-bold`} />

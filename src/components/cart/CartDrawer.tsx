@@ -56,9 +56,9 @@ export function CartDrawer() {
                 {locale === 'es' ? 'Total de Inversión' : 'Total Investment'}
               </span>
               <div className="text-right">
-                <span className="text-3xl font-bold text-gradient block">{formatPrice(total)}</span>
+                <span className="text-3xl font-bold text-gradient block">{formatPrice(total * 1.16)}</span>
                 <span className="text-[10px] text-muted-foreground uppercase tracking-tighter">
-                  {locale === 'es' ? 'IVA del 16% Incluido' : '16% VAT Included'}
+                  {locale === 'es' ? '+ 16% IVA Agregado' : '+ 16% VAT Added'}
                 </span>
               </div>
             </div>

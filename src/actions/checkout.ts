@@ -92,7 +92,7 @@ export async function processCheckout(formData: CheckoutPayload) {
 
     // 3. VENTA
     const salePayload = {
-      amount: Number(total.toFixed(2)),
+      amount: Number((total * 1.16).toFixed(2)),
       currency: 484,
       reference: `NC-${Date.now()}`,
       customerInformation: {
@@ -132,7 +132,11 @@ export async function processCheckout(formData: CheckoutPayload) {
     }
 
     // 4. GUARDAR EN BD
-    const subtotalCalc = total / 1.16;
+
+    const subtotalCalc = total;                  // El total actual es el subtotal
+    const impuestoCalc = total * 0.16;           // Calculamos el 16% de IVA
+    const granTotal = total * 1.16;              // Sumamos el subtotal + IVA
+
     const { data: checkoutRecord, error: dbError } = await supabaseAdmin
       .from('checkouts_virexa')
       .insert({
@@ -147,9 +151,9 @@ export async function processCheckout(formData: CheckoutPayload) {
         telefono: contactInfo.phone,
         correo_electronico: contactInfo.email,
         indicaciones_pedido: null,
-        subtotal: subtotalCalc,
-        impuesto: total - subtotalCalc,
-        total_estimado: total,
+        subtotal: Number(subtotalCalc.toFixed(2)),
+        impuesto: Number(impuestoCalc.toFixed(2)),
+        total_estimado: Number(granTotal.toFixed(2)),
         payment_status: 'paid'
       })
       .select()

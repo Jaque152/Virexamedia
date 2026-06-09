@@ -35,7 +35,7 @@ export function AddToCartButton({ planId }: AddToCartButtonProps) {
         ) : (
           <>
             <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-            {locale === 'es' ? 'Añadir al Proyecto' : 'Add to Project'}
+            {locale === 'es' ? 'Añadir al Carrito' : 'Add to Cart'}
           </>
         )}
       </span>

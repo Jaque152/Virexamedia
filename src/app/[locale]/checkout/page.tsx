@@ -189,17 +189,19 @@ export default function CheckoutContent() {
         <div className="border-t border-slate-200 pt-6 space-y-4 text-slate-600">
           <div className="flex justify-between">
             <span>Subtotal</span>
-            <span className="font-medium text-slate-900">{formatPrice(total / 1.16)}</span>
+            <span className="font-medium text-slate-900">{formatPrice(total)}</span>
           </div>
           <div className="flex justify-between">
-            <span>{isEs ? 'Impuestos (16%)' : 'Taxes (16%)'}</span>
-            <span className="font-medium text-slate-900">{formatPrice(total - (total / 1.16))}</span>
+            <span>{isEs ? 'IVA (16%)' : 'VAT (16%)'}</span>
+            <span className="font-medium text-slate-900">{formatPrice(total * 0.16)}</span>
           </div>
           <div className="flex justify-between items-end pt-6">
             <span className="text-lg font-bold text-slate-900">{isEs ? 'Total a Pagar' : 'Total to Pay'}</span>
-            <span className="text-4xl font-bold text-slate-900 tracking-tight">{formatPrice(total)}</span>
+            <span className="text-4xl font-bold text-slate-900 tracking-tight">{formatPrice(total * 1.16)}</span>
           </div>
         </div>
+
+
       </div>
       
     </main>

@@ -65,7 +65,7 @@ function PlanCard({ plan, index, isInView, locale }: { plan: Plan; index: number
               <span className="text-3xl font-bold text-slate-900">
                 {formatPrice(plan.price)}
               </span>
-              <span className="text-sm font-medium text-slate-400">MXN</span>
+              <span className="text-sm font-medium text-slate-400">MXN + IVA (16%)</span>
             </div>
           </div>
 

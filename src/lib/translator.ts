@@ -42,7 +42,7 @@ export async function getTranslation(text: string, targetLang: string): Promise<
     const translatedText = data.translations[0].text;
 
     // 3. Guardar en Supabase para futuras consultas (Fire and forget, sin await para no bloquear)
-    supabase.from('translations').insert({
+    supabase.from('translations').upsert({
       key_text: text,
       lang: targetLang,
       translated_text: translatedText
