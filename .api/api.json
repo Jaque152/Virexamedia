@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "apis": [
+    {
+      "identifier": "etomin",
+      "source": "@etomin/v2.0#4fyrx5adlme4jni7v",
+      "integrity": "sha512-RpkJLjjPjJrHiHCHbk9dku3AjyN7eycojuBY4EihfstBllG473deCQ7idhu0Ot85VOfFiWUR49Vn0Lz/WZqmxQ==",
+      "installerVersion": "6.1.3"
+    }
+  ]
+}

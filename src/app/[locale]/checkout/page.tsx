@@ -4,6 +4,7 @@ import { useLocale } from 'next-intl';
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "@/hooks/use-cart";
+import Image from "next/image";
 import { CheckCircle, Loader2, Lock, ArrowLeft, Code2 } from "lucide-react";
 import { processCheckout } from "@/actions/checkout";
 import { Button } from "@/components/ui/button";
@@ -128,7 +129,18 @@ export default function CheckoutContent() {
 
           <section className="relative">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-slate-900">{isEs ? 'Pago Seguro' : 'Secure Payment'}</h2>
+              <div className="flex items-center gap-3">
+                <h2 className="text-lg font-bold text-slate-900">{isEs ? 'Pago Seguro' : 'Secure Payment'}</h2>
+                <div className="flex items-center justify-center rounded-2xl border border-slate-200 bg-white p-1 shadow-sm">
+                  <Image
+                    src="/octano_logo.jpeg"
+                    alt="Octano"
+                    width={36}
+                    height={24}
+                    className="object-contain"
+                  />
+                </div>
+              </div>
               <div className="flex gap-2">
                 {/* Iconos genéricos de tarjetas */}
                 <div className="w-8 h-5 bg-slate-200 rounded"></div>

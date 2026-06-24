@@ -1,0 +1,20 @@
+import type { FromSchema } from 'json-schema-to-ts';
+import * as schemas from './schemas';
+
+export type GetCardsResponse200 = FromSchema<typeof schemas.GetCards.response['200']>;
+export type GetTransactionOrderidMetadataParam = FromSchema<typeof schemas.GetTransactionOrderid.metadata>;
+export type GetTransactionOrderidResponse200 = FromSchema<typeof schemas.GetTransactionOrderid.response['200']>;
+export type GetTransactionReferenceReferenceMetadataParam = FromSchema<typeof schemas.GetTransactionReferenceReference.metadata>;
+export type GetTransactionReferenceReferenceResponse200 = FromSchema<typeof schemas.GetTransactionReferenceReference.response['200']>;
+export type PostCardTokenizerBodyParam = FromSchema<typeof schemas.PostCardTokenizer.body>;
+export type PostCardTokenizerResponse200 = FromSchema<typeof schemas.PostCardTokenizer.response['200']>;
+export type PostRefundBodyParam = FromSchema<typeof schemas.PostRefund.body>;
+export type PostRefundResponse200 = FromSchema<typeof schemas.PostRefund.response['200']>;
+export type PostReversalBodyParam = FromSchema<typeof schemas.PostReversal.body>;
+export type PostReversalResponse200 = FromSchema<typeof schemas.PostReversal.response['200']>;
+export type PostSaleBodyParam = FromSchema<typeof schemas.PostSale.body>;
+export type PostSaleResponse200 = FromSchema<typeof schemas.PostSale.response['200']>;
+export type PostSigninBodyParam = FromSchema<typeof schemas.PostSignin.body>;
+export type PostSigninResponse200 = FromSchema<typeof schemas.PostSignin.response['200']>;
+export type PostSignupBodyParam = FromSchema<typeof schemas.PostSignup.body>;
+export type PostSignupResponse200 = FromSchema<typeof schemas.PostSignup.response['200']>;
