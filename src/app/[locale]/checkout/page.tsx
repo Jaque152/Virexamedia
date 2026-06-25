@@ -128,21 +128,27 @@ export default function CheckoutContent() {
           </section>
 
           <section className="relative">
-            {/* HEADER: Título a la izquierda, logo Octano a la derecha */}
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-slate-900">
-                {isEs ? 'Pago Seguro' : 'Secure Payment'}
-              </h2>
-              <div className="flex items-center justify-center rounded-2xl border border-slate-200 bg-white p-1 shadow-sm">
-                <Image
-                  src="/octano_logo.jpeg"
-                  alt="Octano"
-                  width={54}
-                  height={36}
-                  className="object-contain"
-                />
-              </div>
-            </div>
+  <div className="flex items-center justify-between mb-4">
+    <h2 className="text-lg font-bold text-slate-900">
+      {isEs ? 'Pago Seguro' : 'Secure Payment'}
+    </h2>
+    <div className="flex items-center gap-4">
+      <Image
+        src="/octano_logo.jpeg"
+        alt="Octano"
+        width={81}
+        height={54}
+        className="object-contain"
+      />
+      <Image
+        src="/secure_logo.jpeg"
+        alt="Secure"
+        width={81}
+        height={54}
+        className="object-contain"
+      />
+    </div>
+  </div>
             
             <div className="bg-slate-50 p-1 rounded-2xl border border-slate-100">
               <Input placeholder={isEs ? "Número de tarjeta" : "Card number"} required maxLength={19} value={cardInfo.number} onChange={(e)=>setCardInfo({...cardInfo, number: e.target.value.replace(/\D/g, '')})} className="h-14 bg-transparent border-0 focus-visible:ring-0 rounded-none border-b border-slate-200 px-5 font-mono text-lg" />
@@ -155,7 +161,7 @@ export default function CheckoutContent() {
           </section>
 
           <Button type="submit" disabled={isProcessing} className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold h-16 rounded-xl text-lg shadow-xl shadow-slate-900/20">
-            {isProcessing ? <Loader2 className="animate-spin w-6 h-6 mx-auto" /> : (isEs ? `Pagar ${formatPrice(total)}` : `Pay ${formatPrice(total)}`)}
+            {isProcessing ? <Loader2 className="animate-spin w-6 h-6 mx-auto" /> : (isEs ? `Pagar ${formatPrice(total * 1.16)}` : `Pay ${formatPrice(total)}`)}
           </Button>
           
           <p className="text-center text-slate-400 text-sm flex items-center justify-center gap-2 mt-4">
@@ -166,7 +172,7 @@ export default function CheckoutContent() {
         </form>
       </div>
 
-      {/* LADO DERECHO: Resumen de Orden */}
+      {/* LADO DERECHO: Resumen de Orden (Fondo Azul Claro/Cian) */}
       <div className="w-full lg:w-[40%] bg-slate-50 border-b lg:border-b-0 lg:border-l border-slate-200 p-8 pt-28 md:p-16 md:pt-32 lg:p-24 lg:pt-32 lg:sticky top-0 lg:h-screen overflow-y-auto">
         <h3 className="text-xl font-bold text-slate-900 mb-8">
           {isEs ? 'Resumen del Proyecto' : 'Project Summary'}
@@ -208,6 +214,7 @@ export default function CheckoutContent() {
             <span className="text-4xl font-bold text-slate-900 tracking-tight">{formatPrice(total * 1.16)}</span>
           </div>
         </div>
+
 
       </div>
       
