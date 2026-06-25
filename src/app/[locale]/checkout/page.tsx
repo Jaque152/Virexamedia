@@ -128,23 +128,19 @@ export default function CheckoutContent() {
           </section>
 
           <section className="relative">
+            {/* HEADER: Título a la izquierda, logo Octano a la derecha */}
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <h2 className="text-lg font-bold text-slate-900">{isEs ? 'Pago Seguro' : 'Secure Payment'}</h2>
-                <div className="flex items-center justify-center rounded-2xl border border-slate-200 bg-white p-1 shadow-sm">
-                  <Image
-                    src="/octano_logo.jpeg"
-                    alt="Octano"
-                    width={54} //escala: 150%
-                    height={36}
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-              <div className="flex gap-2">
-                {/* Iconos genéricos de tarjetas */}
-                <div className="w-8 h-5 bg-slate-200 rounded"></div>
-                <div className="w-8 h-5 bg-slate-200 rounded"></div>
+              <h2 className="text-lg font-bold text-slate-900">
+                {isEs ? 'Pago Seguro' : 'Secure Payment'}
+              </h2>
+              <div className="flex items-center justify-center rounded-2xl border border-slate-200 bg-white p-1 shadow-sm">
+                <Image
+                  src="/octano_logo.jpeg"
+                  alt="Octano"
+                  width={54}
+                  height={36}
+                  className="object-contain"
+                />
               </div>
             </div>
             
@@ -170,7 +166,7 @@ export default function CheckoutContent() {
         </form>
       </div>
 
-      {/* LADO DERECHO: Resumen de Orden (Fondo Azul Claro/Cian) */}
+      {/* LADO DERECHO: Resumen de Orden */}
       <div className="w-full lg:w-[40%] bg-slate-50 border-b lg:border-b-0 lg:border-l border-slate-200 p-8 pt-28 md:p-16 md:pt-32 lg:p-24 lg:pt-32 lg:sticky top-0 lg:h-screen overflow-y-auto">
         <h3 className="text-xl font-bold text-slate-900 mb-8">
           {isEs ? 'Resumen del Proyecto' : 'Project Summary'}
@@ -212,7 +208,6 @@ export default function CheckoutContent() {
             <span className="text-4xl font-bold text-slate-900 tracking-tight">{formatPrice(total * 1.16)}</span>
           </div>
         </div>
-
 
       </div>
       
