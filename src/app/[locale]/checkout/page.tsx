@@ -135,7 +135,7 @@ export default function CheckoutContent() {
                   <Image
                     src="/octano_logo.jpeg"
                     alt="Octano"
-                    width={54}
+                    width={54} //escala: 150%
                     height={36}
                     className="object-contain"
                   />

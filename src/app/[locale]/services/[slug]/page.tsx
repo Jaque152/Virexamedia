@@ -122,7 +122,7 @@ export default async function PlanDetailPage({
                   {formatPrice(plan.price)}
                 </div>
                 <div className="text-slate-400 text-sm font-medium">
-                  {isEs ? 'Facturación única • IVA Incluido' : 'One-time billing • Taxes Included'}
+                  {isEs ? 'Facturación única • + IVA' : 'One-time billing • Plus Tax'}
                 </div>
               </div>
 
